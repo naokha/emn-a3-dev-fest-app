@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="collection" ng-if="sessions.length > 0">
+        <a ui-sref="sessions-detail({sessionId: session.id})" ng-repeat="session in sessions" class="collection-item">{{session.title}} <i class="fa fa-angle-right fa-2x secondary-content" aria-hidden="true"></i></a>
+    </div>
+    <h4 ng-if="sessions.length === 0" class="center-align">
+    	Aucune session
+    </h4>
+</div>

@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="collection" ng-if="presenters.length > 0">
+        <a ui-sref="presenters-detail({presenterId: presenter.id})" ng-repeat="presenter in presenters | orderBy : 'lastname'" class="collection-item avatar">
+            <img ng-src="images/{{presenter.image}}" alt="{{presenter.id}}" class="circle">
+            <span class="title">
+         	{{presenter.firstname}} {{presenter.lastname}} 
+         </span>
+            <p>{{presenter.company}}</p>
+            <i class="fa fa-angle-right fa-2x secondary-content" aria-hidden="true"></i></a>
+    </div>
+    <h4 ng-if="presenters.length === 0" class="center-align">
+    	Aucun présentateur
+    </h4>
+</div>

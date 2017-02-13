@@ -1,0 +1,27 @@
+<div class="row margin-tp-20">
+    <div class="switch">
+        Ajouter à mes contacts
+        <label>
+            <input type="checkbox" ng-model="isInContacts" ng-change="handleContactChanged()">
+            <span class="lever"></span>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="card">
+        <div class="card-image">
+            <img ng-src="images/{{presenter.image}}">
+            <span class="card-title">{{presenter.firstname}} {{presenter.lastname}}</span>
+        </div>
+        <div class="card-content">
+            <p>{{presenter.about}}</p>
+        </div>
+        <div class="card-action">
+            <a ng-repeat="link in presenter.socials" ng-click="openInBrowser(link.link)">{{link.class}}</a>
+        </div>
+    </div>
+</div>
+<div class="row" ng-if="presenterSessions.length > 0">
+    <h4>Ses présentations</h4>
+    <a ng-repeat="session in presenterSessions" ui-sref="sessions-detail({sessionId: session.id})">{{session.title}}</a>
+</div>

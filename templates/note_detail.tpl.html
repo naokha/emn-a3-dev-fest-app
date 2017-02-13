@@ -1,0 +1,40 @@
+<div class="row margin-tp-20">
+    <button class="btn btn-primary" ng-click="takePictureWithCamera()"><i class="fa fa-camera" aria-hidden="true"></i></button>
+    <button class="btn btn-primary" ng-click="takePictureFromLibrary()"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
+    <button class="btn btn-primary" ng-click="takeVideo()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
+    <button class="btn btn-primary" ng-click="takeAudio()"><i class="fa fa-microphone" aria-hidden="true"></i></button>
+</div>
+<div class="row">
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field">
+                <input value="{{note.title}}" ng-model="note.title" id="title" type="text" class="validate">
+                <label class="active" for="title">Titre</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <textarea id="textarea1" class="materialize-textarea" ng-model="note.comment">{{note.comment}}</textarea>
+                <label class="active" for="textarea1">Note</label>
+            </div>
+        </div>
+    </form>
+</div>
+<!--<div class="carousel carousel-slider" ng-if="pictures.length > 0">
+    <a ng-repeat="picture in pictures" class="carousel-item"><img data-ng-src={{picture.picture}}></a>
+</div>-->
+<div class="row" ng-repeat="picture in pictures">
+    <img data-ng-src={{picture.picture}}>
+</div>
+<video class="responsive-video" controls ng-repeat="video in videos">
+    <source ng-src="{{video.video}}" type="video/mp4">
+</video>
+<audio controls ng-repeat="audio in audios">
+  <source ng-src="{{audio.audio}}">
+</audio>
+<div class="row center">
+    <div class="col s12">
+        <button class="waves-effect waves-light btn" ng-disabled="!noteChanged()" ng-click="updateNote()">Enregistrer</button>
+        <button class="waves-effect waves-light btn red" ng-click="deleteNote()" ng-if="mode === 'edit'">Supprimer</button>
+    </div>
+</div>
