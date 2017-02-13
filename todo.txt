@@ -1,8 +1,2 @@
-- titre session dans les notes
-- utiliser des constantes de configuration
-- génération auto des tables à partir de la config
-- fonctions générales pour utiliser la BDD (sélection d'une colonne dans une table, etc)
-- resolve au niveau des routes pour précharger la bdd
 - fix carousel img
 - fenetre confirmation ajout image
-- switch contact en resolve

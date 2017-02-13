@@ -5,3 +5,7 @@
 #conf-img {
 	max-width: 50%;
 }
+
+.btn.full-width {
+	display: block!important;
+}

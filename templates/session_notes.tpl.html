@@ -1,11 +1,15 @@
-<div class="row">
-	<a ui-sref="sessions-detail-notes-new({sessionId: sessionId})" class="btn btn-primary">Nouvelle note</a>
+<div class="row margin-tp-20 center-align">
+	<h5>{{session.title}}</h5>
+</div>
+<div class="row center-align">
+	<a ui-sref="sessions-detail-notes-new({sessionId: sessionId})" class="btn full-width"><i class="fa fa-plus" aria-hidden="true"></i>
+ Nouvelle note</a>
 </div>
 <div class="row">
     <div class="collection" ng-if="notes.length > 0">
         <a ui-sref="sessions-detail-notes-detail({sessionId: sessionId, noteId: note.id})" ng-repeat="note in notes" class="collection-item">{{note.title}} <i class="fa fa-angle-right fa-2x secondary-content" aria-hidden="true"></i></a>
     </div>
-    <h4 ng-if="notes.length === 0" class="center-align">
+    <h6 ng-if="notes.length === 0" class="center-align">
    	 	Aucune note
-    </h4>
+    </h6>
 </div>

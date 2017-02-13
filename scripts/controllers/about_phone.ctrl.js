@@ -1,8 +1,11 @@
 (function() {
     'use strict';
     angular.module('app.controllers')
-        .controller('AboutPhoneCtrl', ['$scope', '$cordovaDevice', '$cordovaNetwork', 'InAppBrowserFactory',
-            function($scope, $cordovaDevice, $cordovaNetwork, InAppBrowserFactory) {
+        .controller('AboutPhoneCtrl',
+            function($scope,
+                $cordovaDevice,
+                $cordovaNetwork,
+                InAppBrowserFactory) {
 
                 /**
                  * Init function
@@ -18,6 +21,5 @@
 
                 $scope.openInBrowser = InAppBrowserFactory.openLink;
                 $scope.init();
-            }
-        ]);
+            });
 })();

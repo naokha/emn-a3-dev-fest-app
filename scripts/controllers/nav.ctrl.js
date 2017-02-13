@@ -1,8 +1,10 @@
 (function() {
     'use strict';
     angular.module('app.controllers')
-        .controller('NavCtrl', ['$scope', '$state', '$rootScope',
-            function($scope, $state, $rootScope) {
+        .controller('NavCtrl',
+            function($scope,
+                $state,
+                $rootScope) {
                 /**
                  * Init function
                  * @return
@@ -61,6 +63,5 @@
                     }
                 });
                 $scope.init();
-            }
-        ]);
+            });
 })();

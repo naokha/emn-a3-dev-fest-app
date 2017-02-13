@@ -1,8 +1,9 @@
 (function() {
     'use strict';
     angular.module('app.controllers')
-        .controller('SessionsCtrl', ['$scope', 'sessions',
-            function($scope, sessions) {
+        .controller('SessionsCtrl',
+            function($scope,
+                sessions) {
 
                 /**
                  * Init function
@@ -13,5 +14,5 @@
                 }
                 $scope.init();
             }
-        ]);
+        );
 })();

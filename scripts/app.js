@@ -8,11 +8,14 @@
         angular.bootstrap(document, ['app']);
     });
 
-    var app = angular.module('app', [ /*'ngRoute',*/ 'ui.router', 'app.controllers', 'ngSanitize', 'ngCordova'])
+    var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova'])
         .run(function($rootScope) {
             $rootScope.$on('$viewContentLoaded', function() { // what do to each time the ng view is populated
                 $('.carousel.carousel-slider').carousel({ fullWidth: true });
                 $('.carousel').carousel();
+            });
+            $rootScope.$on('$stateChangeSuccess', function() {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
             });
         })
         .config(function($stateProvider, $urlRouterProvider) {
@@ -51,7 +54,10 @@
                     resolve: {
                         notes: function($stateParams, SessionNotesFactory) {
                             return SessionNotesFactory.getNotesBySessionId($stateParams.sessionId);
-                        }
+                        },
+                        session: function($stateParams, SessionsFactory) {
+                            return SessionsFactory.getSessionById($stateParams.sessionId);
+                        },
                     }
                 })
                 .state("sessions-detail-notes-detail", {
@@ -61,6 +67,9 @@
                     resolve: {
                         note: function($stateParams, SessionNotesFactory) {
                             return SessionNotesFactory.getNoteById($stateParams.noteId);
+                        },
+                        session: function($stateParams, SessionsFactory) {
+                            return SessionsFactory.getSessionById($stateParams.sessionId);
                         },
                         pictures: function($stateParams, NotePicturesFactory) {
                             return NotePicturesFactory.getPicturesByNoteId($stateParams.noteId);
@@ -83,6 +92,9 @@
                     resolve: {
                         note: function($stateParams, SessionNotesFactory) {
                             return SessionNotesFactory.createNewNote($stateParams.sessionId);
+                        },
+                        session: function($stateParams, SessionsFactory) {
+                            return SessionsFactory.getSessionById($stateParams.sessionId);
                         },
                         pictures: function() {
                             return [];

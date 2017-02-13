@@ -1,8 +1,9 @@
 (function() {
     'use strict';
     angular.module('app.controllers')
-        .controller('PresentersCtrl', ['$scope', 'presenters',
-            function($scope, presenters) {
+        .controller('PresentersCtrl',
+            function($scope,
+                presenters) {
 
                 /**
                  * Init function
@@ -13,5 +14,5 @@
                 }
                 $scope.init();
             }
-        ]);
+        );
 })();

@@ -3,6 +3,7 @@
     angular.module('app.controllers')
         .controller('NoteCtrl',
             function($scope,
+                session,
                 $stateParams,
                 SessionNotesFactory,
                 NotePicturesFactory,
@@ -13,7 +14,8 @@
                 pictures,
                 $cordovaCapture,
                 videos,
-                audios) {
+                audios,
+                DialogFactory) {
 
                 /**
                  * Init function
@@ -22,6 +24,7 @@
                 $scope.init = function() {
                     $rootScope.$emit('inChildState'); // indicate to the nav ctrl that we are in child state to display back button
                     $scope.sessionId = $stateParams.sessionId;
+                    $scope.session = session;
                     $scope.noteId = $stateParams.noteId;
                     $scope.note = note;
                     $scope.mode = $stateParams.mode;;
@@ -49,24 +52,24 @@
                         if ($scope.mode === 'create') {
                             SessionNotesFactory.addNote($scope.note.title, $scope.note.comment, $scope.sessionId, $scope.newPictures, $scope.newVideos, $scope.newAudios).then(function(res) {
                                 resetMedia();
-                                Materialize.toast('La note a bien été créée', 4000, 'green');
+                                DialogFactory.showSuccessDialog('La note a bien été créée');
                                 $scope.mode = 'edit'; // we pass in edit mode to allow deletion                           
                             }, function() {
-                                Materialize.toast('Erreur, la note n\'a pas pu être créée', 4000, 'red');
+                                DialogFactory.showErrorDialog('Erreur, la note n\'a pas pu être créée');
                             });
                         } else {
                             SessionNotesFactory.updateNote($scope.note.id, $scope.note.title, $scope.note.comment, $scope.newPictures, $scope.newVideos, $scope.newAudios).then(function() {
                                 resetMedia();
-                                Materialize.toast('La note a bien été mise à jour', 4000, 'green');
+                                DialogFactory.showSuccessDialog('La note a bien été mise à jour');
                             }, function() {
-                                Materialize.toast('Erreur, la note n\'a pas pu être mise à jour', 4000, 'red');
+                                DialogFactory.showErrorDialog('Erreur, la note n\'a pas pu être mise à jour');
                             });
                         }
                     }
 
                 };
 
-                function resetMedia(){
+                function resetMedia() {
                     $scope.newPictures = [];
                     $scope.newVideos = [];
                     $scope.newAudios = [];
@@ -121,10 +124,10 @@
 
                 $scope.deleteNote = function() {
                     SessionNotesFactory.deleteNote($scope.noteId).then(function(res) {
-                        Materialize.toast('La note a bien été supprimée', 4000, 'green');
+                        DialogFactory.showSuccessDialog('La note a bien été supprimée');
                         $state.go("sessions-detail-notes", { 'sessionId': $scope.sessionId }, { location: "replace", reload: true });
                     }, function(err) {
-                        Materialize.toast('Erreur, la note n\'a pas été supprimée', 4000, 'red');
+                        DialogFactory.showErrorDialog('Erreur, la note n\'a pas été supprimée');
                     });
                 };
 
@@ -134,6 +137,5 @@
                 }
 
                 $scope.init();
-            }
-        );
+            });
 })();
