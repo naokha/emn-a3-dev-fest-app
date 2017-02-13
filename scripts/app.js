@@ -8,7 +8,7 @@
         angular.bootstrap(document, ['app']);
     });
 
-    var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova'])
+    var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova', 'ngAnimate', 'anim-in-out'])
         .run(function($rootScope) {
             $rootScope.$on('$viewContentLoaded', function() { // what do to each time the ng view is populated
                 $('.carousel.carousel-slider').carousel({ fullWidth: true });

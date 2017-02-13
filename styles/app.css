@@ -1,11 +1,16 @@
 .margin-tp-20 {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 #conf-img {
-	max-width: 50%;
+    max-width: 50%;
 }
 
 .btn.full-width {
-	display: block!important;
+    display: block!important;
+}
+
+#main-view {
+    position: absolute;
+    width: inherit;
 }
