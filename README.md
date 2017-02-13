@@ -19,3 +19,4 @@ Les scripts sont organisés en factories et controllers. Les factories servent �
 
 ## Points d'amélioration
 * Utiliser des constantes (nom de tables, chemin vers le json des données, durée des dialogs, etc)
+* Bug avec le switch lorsque l'on veut ajouter un speaker dans les contacts (erreur unknown qui arrive après avoir toggle une fois, à voir si cela est dû au téléphone de test)
