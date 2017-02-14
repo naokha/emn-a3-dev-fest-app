@@ -14,3 +14,22 @@
     position: absolute;
     width: inherit;
 }
+
+html,
+body,
+#loading {
+	height: 100%;
+}
+
+html {
+	background-color: #436593;
+}
+
+.loaded {
+	background-color: white!important;
+}
+
+#loading-text {
+	color: white;
+	font-weight: 700;
+}
