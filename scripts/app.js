@@ -11,8 +11,9 @@
     var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova', 'ngAnimate', 'anim-in-out'])
         .run(function($rootScope) {
             $rootScope.$on('$viewContentLoaded', function() { // what do to each time the ng view is populated
-                $('.carousel.carousel-slider').carousel({ fullWidth: true });
+                /*$('.carousel.carousel-slider').carousel({ fullWidth: true });
                 $('.carousel').carousel();
+                $('.slider').slider();*/
             });
             $rootScope.$on('$stateChangeSuccess', function() {
                 document.body.scrollTop = document.documentElement.scrollTop = 0;

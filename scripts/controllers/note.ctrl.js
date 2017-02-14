@@ -37,11 +37,12 @@
                     $scope.videos = videos;
                     $scope.newVideos = [];
                     $scope.picOptions = {
-                        quality: 50,
+                        allowEdit: false,
+                        quality: 100,
                         destinationType: Camera.DestinationType.DATA_URL,
-                        encodingType: Camera.EncodingType.JPEG,
-                        targetWidth: 100,
-                        targetHeight: 100,
+                        encodingType: Camera.EncodingType.PNG,
+                        targetWidth: 600,
+                        targetHeight: 400,
                         saveToPhotoAlbum: false,
                         correctOrientation: true
                     };
@@ -109,6 +110,17 @@
                     options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
                     takePicture(options);
                 }
+
+                $scope.$watchCollection('pictures', function(newNames, oldNames) {
+                    if ($("#imgCarousel") && $scope.pictures.length > 0) {
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $("#imgCarousel").removeClass("initialized");
+                                $("#imgCarousel").carousel();
+                            });
+                        })
+                    }
+                });
 
                 function takePicture(options) {
                     $cordovaCamera.getPicture(options).then(function(imageData) {
