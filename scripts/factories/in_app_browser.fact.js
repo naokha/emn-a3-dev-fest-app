@@ -3,9 +3,9 @@
     angular.module('app').factory("InAppBrowserFactory",
         function($cordovaInAppBrowser) {
             var options = {
-                location: 'no',
-                clearcache: 'yes',
-                toolbar: 'no'
+                location: 'yes',
+                clearcache: 'no',
+                toolbar: 'yes'
             };
             var self = {
                 openLink: function(link) {
