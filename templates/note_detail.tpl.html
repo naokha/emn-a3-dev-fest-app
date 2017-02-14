@@ -1,40 +1,64 @@
 <div class="row margin-tp-20 center-align">
-    <h5>{{session.title}}</h5>
+    <h5 ui-sref="sessions-detail({sessionId: session.id})">{{session.title}}</h5>
 </div>
 <div class="row center-align">
-    <button class="btn blue" ng-click="takePictureWithCamera()"><i class="fa fa-camera" aria-hidden="true"></i></button>
-    <button class="btn blue" ng-click="takePictureFromLibrary()"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
+    <button class="btn blue" ng-click="takePicture('camera')"><i class="fa fa-camera" aria-hidden="true"></i></button>
+    <button class="btn blue" ng-click="takePicture('library')"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takeVideo()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takeAudio()"><i class="fa fa-microphone" aria-hidden="true"></i></button>
 </div>
-<div class="row">
+<div class="margin-tp-20">
     <div class="col s12">
-        <div class="row">
-            <div class="input-field">
-                <input value="{{note.title}}" ng-model="note.title" id="title" type="text">
-                <label class="active" for="title">Titre</label>
-            </div>
+        <div class="input-field">
+            <input value="{{note.title}}" ng-model="note.title" id="title" type="text">
+            <label class="active" for="title">Titre</label>
         </div>
-        <div class="row">
-            <div class="input-field">
-                <textarea id="textarea1" class="materialize-textarea" ng-model="note.comment">{{note.comment}}</textarea>
-                <label class="active" for="textarea1">Note</label>
-            </div>
+        <div class="input-field">
+            <textarea id="textarea1" class="materialize-textarea" ng-model="note.comment">{{note.comment}}</textarea>
+            <label class="active" for="textarea1">Note</label>
         </div>
     </div>
 </div>
-<div class="carousel" ng-show="pictures.length > 0" id="imgCarousel">
-    <a class="carousel-item" ng-repeat="picture in pictures"><img ng-src="{{picture.picture}}"></a>
-</div>
-<video class="responsive-video" controls ng-repeat="video in videos">
-    <source ng-src="{{video.video}}" type="video/mp4">
-</video>
-<audio controls ng-repeat="audio in audios">
-    <source ng-src="{{audio.audio}}">
-</audio>
 <div class="row center">
     <div class="col s12">
         <button class="waves-effect waves-light btn" ng-disabled="!noteChanged()" ng-click="updateNote()">Enregistrer</button>
         <button class="waves-effect waves-light btn red" ng-click="deleteNote()" ng-if="mode === 'edit'">Supprimer</button>
+    </div>
+</div>
+<div class="row center">
+    <a class='dropdown-button btn full-width yellow darken-2' data-activates='seeMedia'>
+        <i class="fa fa-list" aria-hidden="true"></i> {{see}}
+    </a>
+    <ul id='seeMedia' class='dropdown-content'>
+        <li ng-click="see = 'Images';"><a>Images</a></li>
+        <li ng-click="see = 'Vidéos';"><a>Vidéos</a></li>
+        <li ng-click="see = 'Audios';"><a>Audios</a></li>
+        <li ng-click="see = '';"><a>Tout cacher</a></li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col s12">
+        <div ng-show="see === 'Images'">
+            <div class="col s6" ng-repeat="picture in pictures">
+                <img class="responsive-img" data-ng-src="{{picture.picture}}">
+            </div>
+            <p ng-if="pictures.length === 0">Cette note n'a aucune image</p>
+        </div>
+        <div ng-show="see === 'Vidéos'">
+            <div class="col s6" ng-repeat="video in videos">
+                <video class="responsive-video" controls>
+                    <source data-ng-src="{{video.video}}" type="video/mp4">
+                </video>
+            </div>
+            <p ng-if="videos.length === 0">Cette note n'a aucune vidéo</p>
+        </div>
+        <div ng-show="see === 'Audios'">
+            <div ng-repeat="audio in audios">
+                <audio controls>
+                    <source data-ng-src="{{audio.audio}}">
+                </audio>
+            </div>
+            <p ng-if="audios.length === 0">Cette note n'a aucun enregistrement vocal</p>
+        </div>
     </div>
 </div>

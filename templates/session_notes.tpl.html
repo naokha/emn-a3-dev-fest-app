@@ -1,5 +1,5 @@
 <div class="row margin-tp-20 center-align">
-	<h5>{{session.title}}</h5>
+	<h5 ui-sref="sessions-detail({sessionId: session.id})">{{session.title}}</h5>
 </div>
 <div class="row center-align">
 	<a ui-sref="sessions-detail-notes-new({sessionId: sessionId})" class="btn full-width"><i class="fa fa-plus" aria-hidden="true"></i>

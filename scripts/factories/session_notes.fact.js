@@ -31,8 +31,8 @@
                     });
                 },
                 // create a note and then associate pictures if provided
-                addNote: function(title, comment, sessionId, newPictures, newVideos, newAudios) {
-                    return DbFactory.execQuery("insert into SessionNotes (title, comment, sessionId) values (?, ?, ?)", [title, comment, sessionId]).then(function(res){ // first we create the note
+                addNote: function(note, newPictures, newVideos, newAudios) {
+                    return DbFactory.execQuery("insert into SessionNotes (title, comment, sessionId) values (?, ?, ?)", [note.title, note.comment, note.sessionId]).then(function(res){ // first we create the note
                         var noteId = res.insertId;
                         var promises = [];
                         promises.push(NotePicturesFactory.batchAddPicture(newPictures, noteId)); // then we add all the pictures
@@ -52,15 +52,15 @@
                     });
                 },
                 // update a note and its pictures
-                updateNote: function(id, title, comment, newPictures, newVideos, newAudios) {
+                updateNote: function(note, newPictures, newVideos, newAudios) {
                     var promises = [];
                     /*
                         We update the note and add the new pictures and videos in the same time as the note is already in the DB
                      */
-                    promises.push(DbFactory.execQuery("update SessionNotes set title = ?, comment = ? where id = ?", [title, comment, id]));
-                    promises.push(NotePicturesFactory.batchAddPicture(newPictures, id));
-                    promises.push(NoteVideosFactory.batchAddVideo(newVideos, id));
-                    promises.push(NoteAudiosFactory.batchAddAudio(newAudios, id));
+                    promises.push(DbFactory.execQuery("update SessionNotes set title = ?, comment = ? where id = ?", [note.title, note.comment, note.id]));
+                    promises.push(NotePicturesFactory.batchAddPicture(newPictures, note.id));
+                    promises.push(NoteVideosFactory.batchAddVideo(newVideos, note.id));
+                    promises.push(NoteAudiosFactory.batchAddAudio(newAudios, note.id));
                     return $q.all(promises);
                 }
             };

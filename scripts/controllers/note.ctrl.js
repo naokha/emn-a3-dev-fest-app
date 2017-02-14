@@ -2,25 +2,8 @@
     'use strict';
     angular.module('app.controllers')
         .controller('NoteCtrl',
-            function($scope,
-                session,
-                $stateParams,
-                SessionNotesFactory,
-                NotePicturesFactory,
-                $rootScope,
-                $state,
-                note,
-                $cordovaCamera,
-                pictures,
-                $cordovaCapture,
-                videos,
-                audios,
-                DialogFactory) {
+            function($scope, session, $stateParams, SessionNotesFactory, NotePicturesFactory, $rootScope, $state, note, pictures, videos, audios, DialogFactory, MediasFactory) {
 
-                /**
-                 * Init function
-                 * @return
-                 */
                 $scope.init = function() {
                     $rootScope.$emit('inChildState'); // indicate to the nav ctrl that we are in child state to display back button
                     $scope.sessionId = $stateParams.sessionId;
@@ -28,7 +11,6 @@
                     $scope.noteId = $stateParams.noteId;
                     $scope.note = note;
                     $scope.mode = $stateParams.mode;;
-                    $scope.savedNote = angular.copy($scope.note); // keep a copy of the note for change checking
                     $scope.imgSrc = "";
                     $scope.pictures = pictures;
                     $scope.newPictures = [];
@@ -36,103 +18,68 @@
                     $scope.newAudios = [];
                     $scope.videos = videos;
                     $scope.newVideos = [];
-                    $scope.picOptions = {
-                        allowEdit: false,
-                        quality: 100,
-                        destinationType: Camera.DestinationType.DATA_URL,
-                        encodingType: Camera.EncodingType.PNG,
-                        targetWidth: 600,
-                        targetHeight: 400,
-                        saveToPhotoAlbum: false,
-                        correctOrientation: true
-                    };
+                    makeNoteCopy(); // create a copy of the note to know if any note's attribute changed
+                    //$scope.see = '';
                 };
-
                 $scope.updateNote = function() {
                     if ($scope.noteChanged()) {
+                        var queryFn;
+                        var message;
                         if ($scope.mode === 'create') {
-                            SessionNotesFactory.addNote($scope.note.title, $scope.note.comment, $scope.sessionId, $scope.newPictures, $scope.newVideos, $scope.newAudios).then(function(res) {
-                                resetMedia();
-                                DialogFactory.showSuccessDialog('La note a bien été créée');
-                                $scope.mode = 'edit'; // we pass in edit mode to allow deletion                           
-                            }, function() {
-                                DialogFactory.showErrorDialog('Erreur, la note n\'a pas pu être créée');
-                            });
+                            queryFn = SessionNotesFactory.addNote;
+                            message = 'créée';
                         } else {
-                            SessionNotesFactory.updateNote($scope.note.id, $scope.note.title, $scope.note.comment, $scope.newPictures, $scope.newVideos, $scope.newAudios).then(function() {
-                                resetMedia();
-                                DialogFactory.showSuccessDialog('La note a bien été mise à jour');
-                            }, function() {
-                                DialogFactory.showErrorDialog('Erreur, la note n\'a pas pu être mise à jour');
-                            });
+                            queryFn = SessionNotesFactory.updateNote;
+                            message = 'mise à jour';
                         }
+                        queryFn($scope.note, $scope.newPictures, $scope.newVideos, $scope.newAudios).then(function(res) {
+                            $scope.mode = 'edit'; // ensure we pass in edit mode if we were in create mode
+                            makeNoteCopy(); // actualize savedNote
+                            resetMedia();
+                            DialogFactory.showSuccessDialog('La note a bien été ' + message);
+                        }, function(err) {
+                            DialogFactory.showErrorDialog('Erreur, la note n\'a pas pu être ' + message);
+                        });
                     }
 
                 };
+
+                function makeNoteCopy() {
+                    $scope.savedNote = angular.copy($scope.note);
+                }
 
                 function resetMedia() {
                     $scope.newPictures = [];
                     $scope.newVideos = [];
                     $scope.newAudios = [];
                 }
+
                 $scope.takeAudio = function() {
-                    var options = { limit: 3, duration: 10 };
-                    $cordovaCapture.captureAudio(options).then(function(audioData) {
-                        var newAudio = {
-                            "audio": audioData[0].fullPath
-                        };
+                    MediasFactory.takeAudio().then(function(newAudio) {
                         $scope.newAudios.push(newAudio);
                         $scope.audios.push(newAudio);
                     }, function(err) {
-                        // An error occurred. Show a message to the user
-                    });
+                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture du son');
+                    })
                 }
 
                 $scope.takeVideo = function() {
-                    var options = { limit: 3, duration: 15 };
-                    $cordovaCapture.captureVideo(options).then(function(videoData) {
-                        var newVideo = {
-                            "video": videoData[0].fullPath
-                        };
+                    MediasFactory.takeVideo().then(function(newVideo) {
                         $scope.newVideos.push(newVideo);
                         $scope.videos.push(newVideo);
-                    }, function(err) {});
+                    }, function(err) {
+                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de la vidéo');
+                    })
                 }
 
-                $scope.takePictureWithCamera = function() {
-                    var options = $scope.picOptions;
-                    options.sourceType = Camera.PictureSourceType.CAMERA;
-                    takePicture(options);
-                }
-
-                $scope.takePictureFromLibrary = function() {
-                    var options = $scope.picOptions;
-                    options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
-                    takePicture(options);
-                }
-
-                $scope.$watchCollection('pictures', function(newNames, oldNames) {
-                    if ($("#imgCarousel") && $scope.pictures.length > 0) {
-                        setTimeout(function() {
-                            $scope.$apply(function() {
-                                $("#imgCarousel").removeClass("initialized");
-                                $("#imgCarousel").carousel();
-                            });
-                        })
-                    }
-                });
-
-                function takePicture(options) {
-                    $cordovaCamera.getPicture(options).then(function(imageData) {
-                        var pictureSrc = "data:image/jpeg;base64," + imageData;
-                        var newPicture = {
-                            "picture": pictureSrc
-                        };
+                $scope.takePicture = function(source) {
+                    MediasFactory.takePicture(source).then(function(newPicture) {
                         $scope.pictures.push(newPicture);
                         $scope.newPictures.push(newPicture);
-                    }, function(err) {});
+                    }, function(err) {
+                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de l\'image');
+                    })
                 }
-
 
                 $scope.deleteNote = function() {
                     SessionNotesFactory.deleteNote($scope.noteId).then(function(res) {
@@ -145,7 +92,7 @@
 
                 // to check if the title or comment of the note changed
                 $scope.noteChanged = function() {
-                    return $scope.note.title !== $scope.savedNote.title || $scope.note.comment !== $scope.savedNote.comment || $scope.newPictures.length > 0 || $scope.newVideos.length > 0
+                    return $scope.note.title !== $scope.savedNote.title || $scope.note.comment !== $scope.savedNote.comment || $scope.newPictures.length > 0 || $scope.newVideos.length > 0 || $scope.newAudios.length > 0;
                 }
 
                 $scope.init();
