@@ -1,7 +1,7 @@
 <div class="row margin-tp-20 center-align">
     <h5 ui-sref="sessions-detail({sessionId: session.id})">{{session.title}}</h5>
 </div>
-<div class="row center-align">
+<div class="row center-align" ng-controller="MediasCtrl">
     <button class="btn blue" ng-click="takePicture('camera')"><i class="fa fa-camera" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takePicture('library')"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takeVideo()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>

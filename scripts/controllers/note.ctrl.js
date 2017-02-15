@@ -2,7 +2,7 @@
     'use strict';
     angular.module('app.controllers')
         .controller('NoteCtrl',
-            function($scope, session, $stateParams, SessionNotesFactory, NotePicturesFactory, $rootScope, $state, note, pictures, videos, audios, DialogFactory, MediasFactory) {
+            function($scope, session, $stateParams, SessionNotesFactory, NotePicturesFactory, $rootScope, $state, note, pictures, videos, audios, DialogFactory) {
 
                 $scope.init = function() {
                     $rootScope.$emit('inChildState'); // indicate to the nav ctrl that we are in child state to display back button
@@ -11,7 +11,6 @@
                     $scope.noteId = $stateParams.noteId;
                     $scope.note = note;
                     $scope.mode = $stateParams.mode;;
-                    $scope.imgSrc = "";
                     $scope.pictures = pictures;
                     $scope.newPictures = [];
                     $scope.audios = audios;
@@ -52,33 +51,6 @@
                     $scope.newPictures = [];
                     $scope.newVideos = [];
                     $scope.newAudios = [];
-                }
-
-                $scope.takeAudio = function() {
-                    MediasFactory.takeAudio().then(function(newAudio) {
-                        $scope.newAudios.push(newAudio);
-                        $scope.audios.push(newAudio);
-                    }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture du son');
-                    })
-                }
-
-                $scope.takeVideo = function() {
-                    MediasFactory.takeVideo().then(function(newVideo) {
-                        $scope.newVideos.push(newVideo);
-                        $scope.videos.push(newVideo);
-                    }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de la vidéo');
-                    })
-                }
-
-                $scope.takePicture = function(source) {
-                    MediasFactory.takePicture(source).then(function(newPicture) {
-                        $scope.pictures.push(newPicture);
-                        $scope.newPictures.push(newPicture);
-                    }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de l\'image');
-                    })
                 }
 
                 $scope.deleteNote = function() {
