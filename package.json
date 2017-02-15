@@ -9,6 +9,7 @@
     "angular-sanitize": "^1.6.2",
     "angular-ui-router": "^0.4.2",
     "angular-ui-router-anim-in-out": "^1.0.2",
+    "fastclick": "^1.0.6",
     "font-awesome": "^4.7.0",
     "materialize-css": "^0.98.0",
     "ng-cordova": "^0.1.27-alpha"

@@ -10,6 +10,7 @@
 
     var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova', 'ngAnimate', 'anim-in-out'])
         .run(function($rootScope) {
+            FastClick.attach(document.body);
             $rootScope.$on('$viewContentLoaded', function() { // what do to each time the ui view is populated
                 $('.dropdown-button').dropdown();
             });
