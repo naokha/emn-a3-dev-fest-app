@@ -19,16 +19,14 @@
                 batchAddPicture: function(pictures, noteId) {
                     if(pictures.length === 0) {
                         var deferred = $q.defer();
-                        deferred.resolve("finished");
+                        deferred.resolve([]);
                         return deferred.promise;
                     }
-                    var queries = [];
-                    var params = [];
+                    var promises = [];
                     for(var i in pictures) {
-                        queries.push("INSERT INTO NotePictures (picture, noteId) VALUES (?,?)");
-                        params.push([pictures[i].picture, noteId]);
+                        promises.push(DbFactory.execQuery("INSERT INTO NotePictures (picture, noteId) VALUES (?,?)", [pictures[i].picture, noteId]));
                     }
-                    return DbFactory.execTransaction(queries, params);
+                    return $q.all(promises);
                 },
                 addPicture: function(picture, noteId) {
                     return DbFactory.execQuery("insert into NotePictures (picture, noteId) values (?, ?)", [picture, noteId]);

@@ -1,14 +1,16 @@
 (function() {
     'use strict';
     angular.module('app.controllers')
-        .controller('MediasCtrl',
+        .controller('MediasRecorderCtrl',
             function($scope, DialogFactory, MediasFactory) {
                 $scope.takeAudio = function() {
                     MediasFactory.takeAudio().then(function(newAudio) {
                         $scope.$parent.newAudios.push(newAudio);
                         $scope.$parent.audios.push(newAudio);
                     }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture du son');
+                        if (err.code !== 3) {
+                            DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture du son');
+                        }
                     })
                 }
 
@@ -17,7 +19,9 @@
                         $scope.$parent.newVideos.push(newVideo);
                         $scope.$parent.videos.push(newVideo);
                     }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de la vidéo');
+                        if (err.code !== 3) {
+                            DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de la vidéo');
+                        }
                     })
                 }
 
@@ -26,7 +30,9 @@
                         $scope.$parent.pictures.push(newPicture);
                         $scope.$parent.newPictures.push(newPicture);
                     }, function(err) {
-                        DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de l\'image');
+                        if (err.indexOf("cancel") === -1) {
+                            DialogFactory.showErrorDialog('Erreur, un problème a eu lieu lors de la capture de l\'image');
+                        }
                     })
                 }
             });

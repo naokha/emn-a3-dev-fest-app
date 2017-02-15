@@ -1,7 +1,7 @@
 <div class="row margin-tp-20 center-align">
     <h5 ui-sref="sessions-detail({sessionId: session.id})">{{session.title}}</h5>
 </div>
-<div class="row center-align" ng-controller="MediasCtrl">
+<div class="row center-align" ng-controller="MediasRecorderCtrl">
     <button class="btn blue" ng-click="takePicture('camera')"><i class="fa fa-camera" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takePicture('library')"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
     <button class="btn blue" ng-click="takeVideo()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
@@ -36,29 +36,30 @@
         <li ng-click="see = '';"><a>Tout cacher</a></li>
     </ul>
 </div>
-<div class="row">
+<div class="row" ng-controller="MediasActionCtrl">
     <div class="col s12">
         <div ng-show="see === 'Images'">
-            <div class="col s6" ng-repeat="picture in pictures">
-                <img class="responsive-img" data-ng-src="{{picture.picture}}">
+            <div class="col s6" ng-repeat="picture in $parent.pictures">
+                <img class="responsive-img" ng-click="showImageActionSheet(picture)" data-ng-src="{{picture.picture}}">
             </div>
-            <p ng-if="pictures.length === 0">Cette note n'a aucune image</p>
+            <p ng-if="$parent.pictures.length === 0">Cette note n'a aucune image</p>
         </div>
         <div ng-show="see === 'Vidéos'">
-            <div class="col s6" ng-repeat="video in videos">
-                <video class="responsive-video" controls>
+            <div class="col s6" ng-repeat="video in $parent.videos">
+                <video poster="images/video.png" ng-click="$event.preventDefault();$event.stopPropagation();showVideoActionSheet(video, $event)" class="responsive-video">
                     <source data-ng-src="{{video.video}}" type="video/mp4">
                 </video>
             </div>
-            <p ng-if="videos.length === 0">Cette note n'a aucune vidéo</p>
+            <p ng-if="$parent.videos.length === 0">Cette note n'a aucune vidéo</p>
         </div>
         <div ng-show="see === 'Audios'">
-            <div ng-repeat="audio in audios">
-                <audio controls>
+            <div class="col s6" ng-repeat="audio in $parent.audios">
+                <img class="media-img" src="images/audio.png" ng-click="showAudioActionSheet(audio, $event)">
+                <audio>
                     <source data-ng-src="{{audio.audio}}">
                 </audio>
             </div>
-            <p ng-if="audios.length === 0">Cette note n'a aucun enregistrement vocal</p>
+            <p ng-if="$parent.audios.length === 0">Cette note n'a aucun enregistrement vocal</p>
         </div>
     </div>
 </div>

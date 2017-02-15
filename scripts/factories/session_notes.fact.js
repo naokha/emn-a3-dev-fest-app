@@ -35,9 +35,9 @@
                     return DbFactory.execQuery("insert into SessionNotes (title, comment, sessionId) values (?, ?, ?)", [note.title, note.comment, note.sessionId]).then(function(res){ // first we create the note
                         var noteId = res.insertId;
                         var promises = [];
-                        promises.push(NotePicturesFactory.batchAddPicture(newPictures, noteId)); // then we add all the pictures
-                        promises.push(NoteVideosFactory.batchAddVideo(newVideos, noteId));
-                        promises.push(NoteAudiosFactory.batchAddAudio(newAudios, noteId));
+                        promises.push(NotePicturesFactory.batchAddPicture(newPictures, noteId)); // we add all the pictures
+                        promises.push(NoteVideosFactory.batchAddVideo(newVideos, noteId)); // we add all the videos
+                        promises.push(NoteAudiosFactory.batchAddAudio(newAudios, noteId)); // we add all the audios
                         return $q.all(promises);
                     });
                 },
@@ -55,7 +55,7 @@
                 updateNote: function(note, newPictures, newVideos, newAudios) {
                     var promises = [];
                     /*
-                        We update the note and add the new pictures and videos in the same time as the note is already in the DB
+                        We update the note and add the new pictures, audios and videos in the same time as the note is already in the DB
                      */
                     promises.push(DbFactory.execQuery("update SessionNotes set title = ?, comment = ? where id = ?", [note.title, note.comment, note.id]));
                     promises.push(NotePicturesFactory.batchAddPicture(newPictures, note.id));

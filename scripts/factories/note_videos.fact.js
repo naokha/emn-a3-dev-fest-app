@@ -19,16 +19,14 @@
                 batchAddVideo: function(videos, noteId) {
                     if(videos.length === 0) {
                         var deferred = $q.defer();
-                        deferred.resolve("finished");
+                        deferred.resolve([]);
                         return deferred.promise;
                     }
-                    var queries = [];
-                    var params = [];
+                    var promises = [];
                     for(var i in videos) {
-                        queries.push("INSERT INTO NoteVideos (video, noteId) VALUES (?,?)");
-                        params.push([videos[i].video, noteId]);
+                        promises.push(DbFactory.execQuery("INSERT INTO NoteVideos (video, noteId) VALUES (?,?)", [videos[i].video, noteId]));
                     }
-                    return DbFactory.execTransaction(queries, params);
+                    return $q.all(promises);
                 },
                 addVideo: function(video, noteId) {
                     return DbFactory.execQuery("insert into NoteVideos (video, noteId) values (?, ?)", [video, noteId]);

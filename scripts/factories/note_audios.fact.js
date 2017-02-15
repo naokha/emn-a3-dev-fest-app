@@ -19,16 +19,14 @@
                 batchAddAudio: function(audios, noteId) {
                     if(audios.length === 0) {
                         var deferred = $q.defer();
-                        deferred.resolve("finished");
+                        deferred.resolve([]);
                         return deferred.promise;
                     }
-                    var queries = [];
-                    var params = [];
+                    var promises = [];
                     for(var i in audios) {
-                        queries.push("INSERT INTO NoteAudios (audio, noteId) VALUES (?,?)");
-                        params.push([audios[i].video, noteId]);
+                        promises.push(DbFactory.execQuery("INSERT INTO NoteAudios (audio, noteId) VALUES (?,?)", [audios[i].audio, noteId]));
                     }
-                    return DbFactory.execTransaction(queries, params);
+                    return $q.all(promises);
                 },
                 addAudio: function(audio, noteId) {
                     return DbFactory.execQuery("insert into NoteAudios (audio, noteId) values (?, ?)", [audio, noteId]);
