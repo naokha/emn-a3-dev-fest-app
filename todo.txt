@@ -1,2 +1,0 @@
-- fix carousel img
-- fenetre confirmation ajout image
