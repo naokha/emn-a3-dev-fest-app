@@ -7,15 +7,16 @@
          */
         angular.bootstrap(document, ['app']);
     });
-
     var app = angular.module('app', ['ui.router', 'app.controllers', 'ngSanitize', 'ngCordova', 'ngAnimate', 'anim-in-out'])
         .run(function($rootScope) {
             FastClick.attach(document.body);
             $rootScope.$on('$viewContentLoaded', function() { // what do to each time the ui view is populated
                 $('.dropdown-button').dropdown();
+                $('.modal').modal();
             });
             $rootScope.$on('$stateChangeSuccess', function() {
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
+                $('.modal').modal('close');
             });
         })
         .config(function($stateProvider, $urlRouterProvider) {
@@ -23,6 +24,22 @@
                 .state('conference', {
                     url: '/',
                     templateUrl: "templates/conference.tpl.html"
+                })
+                .state('agenda', {
+                    url: '/agenda',
+                    templateUrl: "templates/agenda.tpl.html",
+                    controller: "AgendaCtrl",
+                    resolve: {
+                        agendaSchedules: function(AgendaFactory) {
+                            return AgendaFactory.getAgendaSchedules();
+                        },
+                        sessions: function(SessionsFactory) {
+                            return SessionsFactory.getSessions();
+                        },
+                        schedules: function(AgendaFactory) {
+                            return AgendaFactory.getSchedules();
+                        }
+                    }
                 })
                 .state("sessions", {
                     url: '/sessions',
@@ -142,4 +159,10 @@
             $urlRouterProvider.otherwise('/');
 
         });
+    if (!window.cordova) {
+
+        angular.element(document).ready(function() {
+            angular.bootstrap(document, ['app']);
+        });
+    }
 })();

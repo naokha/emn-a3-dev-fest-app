@@ -27,9 +27,13 @@
                         "presenters": {
                             "name": "Présentateurs"
                         },
+                        "agenda": {
+                            "name": "Agenda"
+                        },
                         "about_phone": {
                             "name": "Téléphone"
                         }
+
                     }
                     setCurrentView('conference');
                 };

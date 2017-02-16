@@ -1,0 +1,57 @@
+<div class="row margin-tp-20 center-align">
+    <div class="switch">
+        Voir les sessions passées
+        <label>
+            <input type="checkbox" ng-model="seePastSessions">
+            <span class="lever"></span>
+        </label>
+    </div>
+</div>
+<ul class="collection" ng-if="agendaSchedules.length > 0">
+    <li class="collection-item " ng-repeat="agendaSchedule in agendaSchedules | scheduleSorter" ng-if="canSeeSession(agendaSchedule)">
+        <span class="blue-text">
+                	{{agendaSchedule.hourStart}}h{{agendaSchedule.minStart}} - {{agendaSchedule.hourEnd}}h{{agendaSchedule.minEnd}}
+                </span>
+        <br/> {{getSessionOfAgendaSchedule(agendaSchedule).title}}
+        <br/>
+        <span class="teal-text">
+                 {{getSessionOfAgendaSchedule(agendaSchedule).confRoom}}
+             </span>
+        <span class="secondary-content" ng-if="sessionIsNow(agendaSchedule)">
+            	<span class="orange new badge" data-badge-caption="">
+            		<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> En cours
+            	</span>
+        </span>
+    </li>
+</ul>
+<p ng-if="agendaSchedules.length === 0" class="center-align">Pas de session planifiée</p>
+<div class="row center-align">
+    <button data-target="sessionsModal" class="btn">Planifier</button>
+</div>
+<div id="sessionsModal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h5 class="center-align">Choisissez les sessions</h5>
+        <div class="fixed-action-btn">
+            <button class=" modal-action modal-close btn blue">
+                Fermer
+            </button>
+        </div>
+        <ul class="collection">
+            <li class="collection-item center-align" ng-click="chooseSession(session)" ng-repeat="session in sessions | sortSessionBySchedule : schedules">
+                <span class="blue-text" data-badge-caption="">
+                	{{schedules[session.hour].hourStart}}h{{schedules[session.hour].minStart}} - {{schedules[session.hour].hourEnd}}h{{schedules[session.hour].minEnd}}
+                </span>
+                <br/>
+                <span class="truncate">
+                   {{session.title}}
+				</span>
+                <button class="btn btn-small" ng-show="!isSessionInAgendaSchedules(session.id)" ng-disabled="!canAddSession(session)" ng-click="addSchedule(session)">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Ajouter
+                </button>
+                <button class="btn btn-small red" ng-show="isSessionInAgendaSchedules(session.id)" ng-click="deleteSchedule(session)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i> Supprimer
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

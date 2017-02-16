@@ -55,6 +55,7 @@
                     tx.executeSql("CREATE TABLE IF NOT EXISTS NotePictures(id integer primary key, picture text, noteId text, FOREIGN KEY (noteId) REFERENCES SessionNotes(id))");
                     tx.executeSql("CREATE TABLE IF NOT EXISTS NoteVideos(id integer primary key, video text, noteId text, FOREIGN KEY (noteId) REFERENCES SessionNotes(id))");
                     tx.executeSql("CREATE TABLE IF NOT EXISTS NoteAudios(id integer primary key, audio text, noteId text, FOREIGN KEY (noteId) REFERENCES SessionNotes(id))");
+                    tx.executeSql("CREATE TABLE IF NOT EXISTS Agenda(id integer primary key, hourStart text, minStart text, hourEnd text, minEnd text, sessionId text)");
                 }, function(err) {
                     deferred.reject(err);
                 }, function(res) {

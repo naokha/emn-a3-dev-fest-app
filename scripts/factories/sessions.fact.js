@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     angular.module('app').factory("SessionsFactory",
-        function(DataDevFest, $q) {
+        function(DataDevFest, $q, AgendaFactory) {
             var sessions = null;
             var self = {
                 getSessions: function() {
@@ -19,9 +19,15 @@
                             return session.id === sessionId;
                         })
                         if (session.length === 0) {
-                            throw ("Session with id " + sessionId + " was not found in the list of sessions");
+                            deferred.reject("Session with id " + sessionId + " was not found in the list of sessions")
                         } else {
-                            deferred.resolve(session[0]); // return the first session found with the id (should have only one)
+                            var finalSession = session[0]; // take the first session found with the id (should have only one)
+                            AgendaFactory.getSessionSchedule(finalSession.hour).then(function(schedule) {
+                                finalSession.schedule = schedule;
+                                deferred.resolve(finalSession);
+                            }, function(err) {
+                                deferred.reject(err);
+                            });
                         }
                     })
                     return deferred.promise;
@@ -31,7 +37,7 @@
                     self.getSessions().then(function(sess) {
                         var sessions = sess.filter(function(session) {
                             for (var i in session.speakers) {
-                                if(session.speakers[i] === presenterId) {
+                                if (session.speakers[i] === presenterId) {
                                     return true;
                                 }
                             }
