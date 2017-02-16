@@ -44,16 +44,15 @@
                  * @return
                  */
                 $scope.init = function() {
-                    $scope.seePastSessions = true;
+                    $scope.seePastSessions = true; // to know if we display the sessions that are already past
                     $scope.sessions = sessions;
                     $scope.schedules = schedules;
                     $scope.agendaSchedules = agendaSchedules;
-                    $scope.sessionsAlreadyChoosen = [];
+                    $scope.sessionsAlreadyChoosen = []; // keep track of choosen session ids
                     for (var i in $scope.agendaSchedules) {
                         $scope.sessionsAlreadyChoosen.push($scope.agendaSchedules[i].sessionId);
                     }
                 }
-
                 /**
                  * Compute whether or not the session in the agenda can be visible
                  */
@@ -69,10 +68,7 @@
                     var date = new Date;
                     var hour = date.getHours();
                     var minutes = date.getMinutes();
-                    return parseSchedule(agendaSchedule.hourStart) <= hour 
-                    && parseSchedule(agendaSchedule.hourEnd) >= hour 
-                    && parseSchedule(agendaSchedule.minStart) <= minutes 
-                    && parseSchedule(agendaSchedule.minEnd) >= minutes;
+                    return parseSchedule(agendaSchedule.hourStart) <= hour && parseSchedule(agendaSchedule.hourEnd) >= hour && parseSchedule(agendaSchedule.minStart) <= minutes && parseSchedule(agendaSchedule.minEnd) >= minutes;
                 }
 
                 /**
